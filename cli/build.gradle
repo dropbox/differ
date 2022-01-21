@@ -1,0 +1,14 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
+    id 'application'
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "org.jetbrains.kotlinx:kotlinx-cli:0.3.4"
+    implementation project(":differ")
+}
+
+application {
+    mainClass = "com.dropbox.differ.cli.MainKt"
+}
