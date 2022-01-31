@@ -1,0 +1,8 @@
+headers = stb_image.h
+headerFilter = stb_image.h
+package = stb.image
+
+---
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"

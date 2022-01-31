@@ -44,8 +44,6 @@ class SimpleImageComparator(
                 val leftColor = left.getPixel(x, y)
                 val rightColor = right.getPixel(x, y)
 
-                // TODO Convert to CIE LAB color space here or in getPixel?
-
                 val delta = leftColor.distance(rightColor)
                 if (delta > maxDistance) {
                     misses++

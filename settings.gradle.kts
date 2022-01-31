@@ -1,4 +1,4 @@
 rootProject.name = "differ-parent"
 
-include ":differ"
-include ":cli"
+include(":differ")
+include(":cli")

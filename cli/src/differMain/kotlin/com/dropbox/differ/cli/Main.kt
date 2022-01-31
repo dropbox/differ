@@ -20,11 +20,12 @@ fun main(args: Array<String>) {
 
     parser.parse(args)
 
-    val leftImage = FileImage(leftPath)
-    val rightImage = FileImage(rightPath)
-
     val comparator = SimpleImageComparator()
-    val mask = comparator.compare(leftImage, rightImage)
+    val mask = withImage(leftPath) { leftImage ->
+        withImage(rightPath) { rightImage ->
+            comparator.compare(leftImage, rightImage)
+        }
+    }
 
     val difference = mask.count.toDouble() / mask.size
     if (difference > threshold) {
