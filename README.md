@@ -4,7 +4,7 @@ Differ is a multiplatform image diffing library that's designed to be lightweigh
 
 ## License
 
-    Copyright (c) 2021 Dropbox, Inc.
+    Copyright (c) 2022 Dropbox, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
