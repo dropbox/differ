@@ -4,8 +4,8 @@ data class Color(val r: Float, val g: Float, val b: Float, val a: Float)
 
 fun Color(r: UByte, g: UByte, b: UByte, a: UByte = 255u) = Color(
     r = 255f / r.toFloat(),
-    g = 255f / r.toFloat(),
-    b = 255f / r.toFloat(),
+    g = 255f / g.toFloat(),
+    b = 255f / b.toFloat(),
     a = 255f / a.toFloat(),
 )
 
