@@ -1,4 +1,5 @@
-import org.gradle.kotlin.dsl.PluginDependenciesSpecScope
+import org.gradle.plugin.use.PluginDependenciesSpec
+import org.gradle.plugin.use.PluginDependencySpec
 
 object versions {
   const val kotlin = "1.6.10"
@@ -6,7 +7,7 @@ object versions {
 }
 
 // Plugins
-fun PluginDependenciesSpecScope.kover() = id("org.jetbrains.kotlinx.kover").version("0.5.0")
+fun PluginDependenciesSpec.kover() = id("org.jetbrains.kotlinx.kover").version(versions.kover)
 
 object deps {
   object kotlin {

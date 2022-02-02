@@ -2,6 +2,7 @@ package com.dropbox.differ.cli
 
 import com.dropbox.differ.ImageComparator
 import com.dropbox.differ.SimpleImageComparator
+import com.dropbox.differ.Mask
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
 import kotlinx.cli.default
@@ -23,13 +24,14 @@ fun main(args: Array<String>) {
   val comparator = SimpleImageComparator()
   val mask = withImage(leftPath) { leftImage ->
     withImage(rightPath) { rightImage ->
-      comparator.compare(leftImage, rightImage)
+      val mask = Mask(leftImage.width, leftImage.height)
+      comparator.compare(leftImage, rightImage, mask)
+      mask
     }
   }
 
-  val difference = mask.count.toDouble() / mask.size
-  if (difference > threshold) {
-    println("Image comparison failed with difference: $difference")
+  if (mask.difference > threshold) {
+    println("Image comparison failed with difference: ${mask.difference}")
     exitProcess(1)
   } else {
     println("Image comparison succeeded.")
