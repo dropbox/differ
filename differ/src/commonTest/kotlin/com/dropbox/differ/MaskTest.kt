@@ -8,4 +8,9 @@ class MaskTest {
     val mask = Mask(100, 100)
     assertEquals(0.0, mask.difference)
   }
+
+  @Test fun `starts with no pixels masked`() {
+    val mask = Mask(100, 100)
+    assertEquals(0, mask.count)
+  }
 }
