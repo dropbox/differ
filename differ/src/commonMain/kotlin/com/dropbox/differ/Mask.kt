@@ -5,6 +5,11 @@ class Mask(
   val height: Int,
   private val data: FloatArray = FloatArray(width * height) { 0f }
 ) {
+
+  init {
+    require(data.size == width * height)
+  }
+
   /** The total number of pixels in the mask. */
   val size: Int get() = data.size
 
@@ -15,10 +20,14 @@ class Mask(
   val difference: Double get() = count.toDouble() / size
 
   fun getValue(x: Int, y: Int): Float {
+    require(x in (0 until width))
+    require(y in (0 until height))
     return data[getIndex(x, y)]
   }
 
   fun setValue(x: Int, y: Int, value: Float) {
+    require(x in (0 until width))
+    require(y in (0 until height))
     data[getIndex(x, y)] = value
   }
 
