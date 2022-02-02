@@ -6,17 +6,17 @@ import kotlin.math.sqrt
 data class Color(val r: Float, val g: Float, val b: Float, val a: Float)
 
 fun Color(r: UByte, g: UByte, b: UByte, a: UByte = 255u) = Color(
-    r = 255f / r.toFloat(),
-    g = 255f / g.toFloat(),
-    b = 255f / b.toFloat(),
-    a = 255f / a.toFloat(),
+    r = r.toFloat() / 255f,
+    g = g.toFloat() / 255f,
+    b = b.toFloat() / 255f,
+    a = a.toFloat() / 255f,
 )
 
 fun Color(value: Int): Color = Color(
-    r = 255f / (value and 0xFF0000).ushr(16),
-    g = 255f / (value and 0x00FF00).ushr(8),
-    b = 255f / (value and 0x0000FF),
-    a = 255f / value.ushr(24),
+    r = (value and 0xFF0000).ushr(16) / 255f,
+    g = (value and 0x00FF00).ushr(8) / 255f,
+    b = (value and 0x0000FF) / 255f,
+    a = value.ushr(24) / 255f,
 )
 
 fun Color.distance(other: Color): Float {
