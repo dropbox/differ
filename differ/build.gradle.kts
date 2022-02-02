@@ -1,3 +1,5 @@
+import kotlinx.kover.api.KoverTaskExtension
+
 plugins {
   kotlin("multiplatform")
 }
@@ -24,9 +26,6 @@ kotlin {
         implementation(kotlin("test"))
       }
     }
-    val nativeMain by creating {
-      dependsOn(commonMain)
-    }
     get("iosX64Main").dependsOn(commonMain)
     get("iosArm64Main").dependsOn(commonMain)
     get("iosSimulatorArm64Main").dependsOn(commonMain)
@@ -34,5 +33,11 @@ kotlin {
     get("macosX64Main").dependsOn(commonMain)
     get("macosArm64Main").dependsOn(commonMain)
     get("mingwX64Main").dependsOn(commonMain)
+  }
+}
+
+tasks.findByName("jvmTest")?.apply {
+  extensions.configure(KoverTaskExtension::class) {
+    isDisabled = false
   }
 }

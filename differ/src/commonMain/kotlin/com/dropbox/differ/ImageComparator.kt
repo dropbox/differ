@@ -1,40 +1,19 @@
 package com.dropbox.differ
 
-import kotlin.math.pow
-import kotlin.math.sqrt
-
-class Mask(
-  val width: Int,
-  val height: Int,
-  private val data: FloatArray = FloatArray(width * height) { 0f }
-) {
-  val size: Int get() = data.size
-  val count: Int get() = data.count { it > 0f }
-
-  fun getValue(x: Int, y: Int): Float {
-    return data[getIndex(x, y)]
-  }
-
-  fun setValue(x: Int, y: Int, value: Float) {
-    data[getIndex(x, y)] = value
-  }
-
-  private fun getIndex(x: Int, y: Int): Int {
-    return width * y + x
-  }
-}
-
 interface ImageComparator {
   /**
-   * Comparison function that compares two images, and
+   * Compares two images, returning a Double that indicates the percentage of
+   * the images that differ.
+   *
+   * If a mask is supplied, it will be filled with the pixels that differ.
    */
-  fun compare(left: Image, right: Image, output: Mask = Mask(left.width, left.height)): Mask
+  fun compare(left: Image, right: Image, mask: Mask? = null): Double
 }
 
 class SimpleImageComparator(
   val maxDistance: Float = 20f
 ) : ImageComparator {
-  override fun compare(left: Image, right: Image, output: Mask): Mask {
+  override fun compare(left: Image, right: Image, mask: Mask?): Double {
     val width = maxOf(left.width, right.width)
     val height = maxOf(left.height, right.height)
 
@@ -49,17 +28,10 @@ class SimpleImageComparator(
           misses++
         }
 
-        output.setValue(x, y, delta)
+        mask?.setValue(x, y, delta)
       }
     }
-    return output
-  }
 
-  private fun Color.distance(other: Color): Float {
-    val r = (this.r - other.r).pow(2)
-    val g = (this.g - other.g).pow(2)
-    val b = (this.b - other.b).pow(2)
-    val a = (this.a - other.a).pow(2)
-    return sqrt(r + g + b + a)
+    return misses.toDouble() / (width * height)
   }
 }
