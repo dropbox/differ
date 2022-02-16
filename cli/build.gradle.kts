@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
-  kotlin("multiplatform")
+  alias(libs.plugins.kotlin.multiplatform)
 }
 
 kotlin {
@@ -10,20 +10,11 @@ kotlin {
   linuxX64()
   mingwX64()
 
-  targets.withType<KotlinNativeTarget> {
-    binaries {
-      executable {
-        baseName = "differ"
-        entryPoint = "com.dropbox.differ.cli.main"
-      }
-    }
-  }
-
   sourceSets {
     val nativeMain by creating {
       dependencies {
-        implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.4")
-        implementation("org.jetbrains.kotlinx:kotlinx-io:0.1.16")
+        implementation(libs.kotlinx.cli)
+        implementation(libs.kotlinx.io)
         implementation(project(":differ"))
       }
     }
@@ -35,6 +26,13 @@ kotlin {
   }
 
   targets.withType<KotlinNativeTarget> {
+    binaries {
+      executable {
+        baseName = "differ"
+        entryPoint = "com.dropbox.differ.cli.main"
+      }
+    }
+
     compilations["main"].cinterops {
       val stbImage by creating {
         includeDirs(defFile.parentFile.resolve("include"))

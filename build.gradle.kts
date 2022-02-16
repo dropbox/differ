@@ -3,8 +3,8 @@ import kotlinx.kover.tasks.KoverMergedHtmlReportTask
 import kotlinx.kover.tasks.KoverMergedXmlReportTask
 
 plugins {
-  kotlin("multiplatform") apply false
-  kover()
+  alias(libs.plugins.kotlin.multiplatform).apply(false)
+  alias(libs.plugins.kover)
 }
 
 repositories {

@@ -1,0 +1,12 @@
+[versions]
+kotlin = "1.6.10"
+kover = "0.5.0"
+
+[libraries]
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlinx-cli = { module = "org.jetbrains.kotlinx:kotlinx-cli", version = "0.3.4" }
+kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io", version = "0.1.16" }
+
+[plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
