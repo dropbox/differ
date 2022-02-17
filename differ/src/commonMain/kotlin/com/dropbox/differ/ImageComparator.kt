@@ -1,5 +1,7 @@
 package com.dropbox.differ
 
+import kotlin.math.abs
+
 interface ImageComparator {
   /**
    * Compares two images, returning a Double that indicates the percentage of
@@ -11,11 +13,39 @@ interface ImageComparator {
 }
 
 class SimpleImageComparator(
-  val maxDistance: Float = 20f
+  val maxDistance: Float = 20f,
+  val hShift: Int = 0,
+  val vShift: Int = 0,
 ) : ImageComparator {
   override fun compare(left: Image, right: Image, mask: Mask?): Double {
     val width = maxOf(left.width, right.width)
     val height = maxOf(left.height, right.height)
+
+    fun compareWindow(x: Int, y: Int, color: Color): Boolean {
+      if (hShift == 0 && vShift == 0) return false
+
+      val l = maxOf(x - hShift, 0)
+      val t = minOf(y + vShift, height - 1)
+      val r = minOf(x + hShift, width - 1)
+      val b = maxOf(y - vShift, 0)
+
+      (l..r).forEach { offsetX ->
+        (b..t).forEach { offsetY ->
+          if (offsetX != x || offsetY != y) {
+            val c1 = left.getPixel(offsetX, offsetY)
+            val localDeltaThreshold = color.distance(c1)
+
+            val c2 = right.getPixel(offsetX, offsetY)
+            val localDelta = color.distance(c2)
+
+            if (abs(localDelta - localDeltaThreshold) < maxDistance && localDeltaThreshold > maxDistance) {
+              return true
+            }
+          }
+        }
+      }
+      return false
+    }
 
     var misses = 0
     (0 until width).forEach { x ->
@@ -25,7 +55,11 @@ class SimpleImageComparator(
 
         val delta = leftColor.distance(rightColor)
         if (delta > maxDistance) {
-          misses++
+
+          // If exact pixels don't match, check within the shift window
+          if (!compareWindow(x, y, leftColor)) {
+            misses++
+          }
         }
 
         mask?.setValue(x, y, delta)
@@ -34,4 +68,5 @@ class SimpleImageComparator(
 
     return misses.toDouble() / (width * height)
   }
+
 }

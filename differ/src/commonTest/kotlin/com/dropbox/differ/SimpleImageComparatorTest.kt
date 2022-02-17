@@ -1,12 +1,14 @@
 package com.dropbox.differ
 
+import com.dropbox.differ.resources.TestImage
+import com.dropbox.differ.resources.mutate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class SimpleImageComparatorTest {
   @Test fun `returns diff of 0 for identical images`() {
-    val first = testImage()
-    val second = testImage()
+    val first = TestImage()
+    val second = TestImage()
 
     val comparator = SimpleImageComparator()
     val diff = comparator.compare(first, second)
@@ -15,7 +17,7 @@ class SimpleImageComparatorTest {
   }
 
   @Test fun `returns diff of 1 for completely different images`() {
-    val first = testImage()
+    val first = TestImage()
     val second = first.mutate { FloatArray(it.size) { 0f } }
 
     val comparator = SimpleImageComparator()
@@ -25,8 +27,8 @@ class SimpleImageComparatorTest {
   }
 
   @Test fun `mask contains differences`() {
-    val first = testImage(width = 1080, height = 1920)
-    val second = testImage(width = 1080, height = 1920)
+    val first = TestImage(width = 1080, height = 1920)
+    val second = TestImage(width = 1080, height = 1920)
     // Add a 20x20 pixel black square to the center of the image
     (950..970).forEach { y ->
       (530..550).forEach { x ->

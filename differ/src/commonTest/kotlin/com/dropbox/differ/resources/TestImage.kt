@@ -1,6 +1,9 @@
-package com.dropbox.differ
+package com.dropbox.differ.resources
 
-fun testImage(
+import com.dropbox.differ.Color
+import com.dropbox.differ.Image
+
+fun TestImage(
   width: Int = 1080,
   height: Int = 1920,
   components: Int = 4,

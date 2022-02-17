@@ -34,6 +34,20 @@ kotlin {
     get("macosX64Main").dependsOn(commonMain)
     get("macosArm64Main").dependsOn(commonMain)
     get("mingwX64Main").dependsOn(commonMain)
+
+    get("jvmTest").dependsOn(commonTest)
+
+    val nativeTest by creating {
+      dependsOn(commonTest)
+    }
+
+    get("iosX64Test").dependsOn(nativeTest)
+    get("iosArm64Test").dependsOn(nativeTest)
+    get("iosSimulatorArm64Test").dependsOn(nativeTest)
+    get("linuxX64Test").dependsOn(nativeTest)
+    get("macosX64Test").dependsOn(nativeTest)
+    get("macosArm64Test").dependsOn(nativeTest)
+    get("mingwX64Test").dependsOn(nativeTest)
   }
 }
 
