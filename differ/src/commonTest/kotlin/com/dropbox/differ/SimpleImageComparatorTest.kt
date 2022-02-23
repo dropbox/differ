@@ -14,6 +14,9 @@ class SimpleImageComparatorTest {
     val result = comparator.compare(first, second)
 
     assertEquals(0, result.pixelDifferences)
+    assertEquals(first.width * first.height, result.pixelCount)
+    assertEquals(first.width, result.width)
+    assertEquals(first.height, result.height)
   }
 
   @Test fun `returns DIFFERENT for completely different images`() {

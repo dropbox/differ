@@ -33,4 +33,32 @@ class ShiftComparisonTest {
     val percent = comparator.compare(image1, image2)
     assertEquals(0, percent.pixelDifferences)
   }
+
+  @Test fun `returns pass when within horizontal shift margin`() {
+    val comparator = SimpleImageComparator(
+      maxDistance = 0.1f,
+      hShift = 10,
+      vShift = 0
+    )
+
+    val percent = comparator.compare(image1, image2)
+    assertEquals(145, percent.pixelDifferences)
+  }
+
+  @Test fun `returns pass when within vertical shift margin`() {
+    val comparator = SimpleImageComparator(
+      maxDistance = 0.1f,
+      hShift = 0,
+      vShift = 10
+    )
+
+    val percent = comparator.compare(image1, image2)
+    assertEquals(129, percent.pixelDifferences)
+  }
+
+  @Test fun `shift properties dont change`() {
+    val comparator = SimpleImageComparator(hShift = 0, vShift = 10)
+    assertEquals(comparator.hShift, 0)
+    assertEquals(comparator.vShift, 10)
+  }
 }

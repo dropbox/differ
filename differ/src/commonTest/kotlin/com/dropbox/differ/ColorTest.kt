@@ -17,6 +17,12 @@ class ColorTest {
     assertEquals(Color(0f, 0f, 0f, 1f), Color(0u, 0u, 0u))
   }
 
+  @Test fun `many int constructor`() {
+    assertEquals(Color(0f, 0.33333334f, 0.6666667f, 1f), Color(0, 85, 170, 255))
+    assertEquals(Color(1f, 0.6666667f,0.33333334f, 0f), Color(255, 170, 85, 0))
+    assertEquals(Color(0f, 0f, 0f, 1f), Color(0, 0, 0))
+  }
+
   @Test fun `int constructor`() {
     assertEquals(Color(0f, 0f, 0f, 0f), Color(0x00000000))
     assertEquals(Color(0f, 0f, 0f, 1f), Color(0xff000000.toInt()))
