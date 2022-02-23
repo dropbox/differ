@@ -20,17 +20,17 @@ class ShiftComparisonTest {
     val comparator = SimpleImageComparator(maxDistance = 0.1f)
 
     val percent = comparator.compare(image1, image2)
-    assertEquals(0.0318, percent)
+    assertEquals(318, percent.pixelDifferences)
   }
 
   @Test fun `returns pass when within shift margin`() {
     val comparator = SimpleImageComparator(
       maxDistance = 0.1f,
-      hShift = 1,
-      vShift = 1
+      hShift = 10,
+      vShift = 10
     )
 
     val percent = comparator.compare(image1, image2)
-    assertEquals(0.0262, percent)
+    assertEquals(0, percent.pixelDifferences)
   }
 }

@@ -3,21 +3,29 @@ package com.dropbox.differ
 import kotlin.math.abs
 
 interface ImageComparator {
+
+  data class ComparisonResult(
+    val pixelDifferences: Int,
+    val pixelCount: Int,
+    val width: Int,
+    val height: Int,
+  )
+
   /**
    * Compares two images, returning a Double that indicates the percentage of
    * the images that differ.
    *
    * If a mask is supplied, it will be filled with the pixels that differ.
    */
-  fun compare(left: Image, right: Image, mask: Mask? = null): Double
+  fun compare(left: Image, right: Image, mask: Mask? = null): ComparisonResult
 }
 
 class SimpleImageComparator(
-  val maxDistance: Float = 20f,
+  val maxDistance: Float = 0.1f,
   val hShift: Int = 0,
   val vShift: Int = 0,
 ) : ImageComparator {
-  override fun compare(left: Image, right: Image, mask: Mask?): Double {
+  override fun compare(left: Image, right: Image, mask: Mask?): ImageComparator.ComparisonResult {
     val width = maxOf(left.width, right.width)
     val height = maxOf(left.height, right.height)
 
@@ -66,7 +74,12 @@ class SimpleImageComparator(
       }
     }
 
-    return misses.toDouble() / (width * height)
+    return ImageComparator.ComparisonResult(
+      pixelDifferences = misses,
+      pixelCount = width * height,
+      width = width,
+      height = height,
+    )
   }
 
 }

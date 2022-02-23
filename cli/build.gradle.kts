@@ -11,7 +11,11 @@ kotlin {
   mingwX64()
 
   sourceSets {
+    val commonMain by getting {
+      dependencies {}
+    }
     val nativeMain by creating {
+      dependsOn(commonMain)
       dependencies {
         implementation(libs.kotlinx.cli)
         implementation(libs.kotlinx.io)
