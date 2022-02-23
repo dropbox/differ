@@ -1,32 +1,37 @@
 package com.dropbox.differ
 
+import com.dropbox.differ.resources.TestImage
+import com.dropbox.differ.resources.mutate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class SimpleImageComparatorTest {
-  @Test fun `returns diff of 0 for identical images`() {
-    val first = testImage()
-    val second = testImage()
+  @Test fun `returns no pixel differences for identical images`() {
+    val first = TestImage()
+    val second = TestImage()
 
     val comparator = SimpleImageComparator()
-    val diff = comparator.compare(first, second)
+    val result = comparator.compare(first, second)
 
-    assertEquals(0.0, diff)
+    assertEquals(0, result.pixelDifferences)
+    assertEquals(first.width * first.height, result.pixelCount)
+    assertEquals(first.width, result.width)
+    assertEquals(first.height, result.height)
   }
 
-  @Test fun `returns diff of 1 for completely different images`() {
-    val first = testImage()
+  @Test fun `returns DIFFERENT for completely different images`() {
+    val first = TestImage()
     val second = first.mutate { FloatArray(it.size) { 0f } }
 
     val comparator = SimpleImageComparator()
-    val diff = comparator.compare(first, second)
+    val result = comparator.compare(first, second)
 
-    assertEquals(0.0, diff)
+    assertEquals(first.width * first.height, result.pixelDifferences)
   }
 
   @Test fun `mask contains differences`() {
-    val first = testImage(width = 1080, height = 1920)
-    val second = testImage(width = 1080, height = 1920)
+    val first = TestImage(width = 1080, height = 1920)
+    val second = TestImage(width = 1080, height = 1920)
     // Add a 20x20 pixel black square to the center of the image
     (950..970).forEach { y ->
       (530..550).forEach { x ->

@@ -3,13 +3,20 @@ package com.dropbox.differ
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-data class Color(val r: Float, val g: Float, val b: Float, val a: Float)
+data class Color(val r: Float, val g: Float, val b: Float, val a: Float = 1.0f)
 
 fun Color(r: UByte, g: UByte, b: UByte, a: UByte = 255u) = Color(
-    r = r.toFloat() / 255f,
-    g = g.toFloat() / 255f,
-    b = b.toFloat() / 255f,
-    a = a.toFloat() / 255f,
+  r = r.toFloat() / 255f,
+  g = g.toFloat() / 255f,
+  b = b.toFloat() / 255f,
+  a = a.toFloat() / 255f,
+)
+
+fun Color(r: Int, g: Int, b: Int, a: Int = 255) = Color(
+  r = r.toFloat() / 255f,
+  g = g.toFloat() / 255f,
+  b = b.toFloat() / 255f,
+  a = a.toFloat() / 255f,
 )
 
 fun Color(value: Int): Color = Color(
