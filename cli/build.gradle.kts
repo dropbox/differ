@@ -19,6 +19,7 @@ kotlin {
       dependencies {
         implementation(libs.kotlinx.cli)
         implementation(libs.kotlinx.io)
+        implementation(libs.okio)
         implementation(project(":differ"))
       }
     }
