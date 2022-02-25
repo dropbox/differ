@@ -39,6 +39,7 @@ kotlin {
     get("macosX64Main").dependsOn(commonMain)
     get("macosArm64Main").dependsOn(commonMain)
     get("mingwX64Main").dependsOn(commonMain)
+    get("jvmMain").dependsOn(commonMain)
 
     get("jvmTest").dependsOn(commonTest)
 
