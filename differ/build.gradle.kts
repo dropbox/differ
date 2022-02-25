@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
+  alias(libs.plugins.mavenPublish)
 }
 
 kotlin {
