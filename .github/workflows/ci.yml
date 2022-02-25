@@ -8,6 +8,9 @@ on:
   # Always run on PRs
   pull_request:
 
+env:
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
+
 jobs:
   build:
     name: Build and Test
@@ -57,3 +60,35 @@ jobs:
         with:
           name: error-report
           path: build-reports.zip
+
+  publish:
+    runs-on: ubuntu-latest
+    if: github.repository == 'dropbox/differ' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install JDK 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: 11
+
+      - name: Upload Snapshot
+        run: ./gradlew :differ:publish
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+
+      - name: Retrieve Version
+        run: echo "VERSION_NAME=$(./gradlew -q  printVersionName)" >> $GITHUB_ENV
+
+      - name: Publish release (main only)
+        run: ./gradlew closeAndReleaseRepository
+        if: success() && !endsWith(env.VERSION_NAME, '-SNAPSHOT')
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}

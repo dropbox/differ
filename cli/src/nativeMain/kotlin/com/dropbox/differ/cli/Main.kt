@@ -1,11 +1,8 @@
 package com.dropbox.differ.cli
 
-import com.dropbox.differ.Image
 import com.dropbox.differ.ImageComparator
 import com.dropbox.differ.Mask
 import com.dropbox.differ.SimpleImageComparator
-import kotlin.math.pow
-import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 import kotlin.system.getTimeMicros
 import kotlinx.cli.ArgParser
@@ -105,22 +102,4 @@ fun main(args: Array<String>) {
   }
 
   exitProcess(if (pass) 0 else 1)
-}
-
-fun Float.toString(decimals: Int): String {
-  return "${toInt()}.${((this - toInt()) * 10f.pow(decimals)).roundToInt()}"
-}
-
-fun writePPMFile(path: String, image: Image) {
-  val w = image.width
-  val h = image.height
-  println("P3")
-  println("$w $h")
-  println("255")
-  (0 until h).reversed().forEach { y ->
-    (0 until w).forEach { x ->
-      val c = image.getPixel(x, y)
-      println("${(c.r * 255).roundToInt()} ${(c.g * 255).roundToInt()} ${(c.b * 255).roundToInt()}")
-    }
-  }
 }
