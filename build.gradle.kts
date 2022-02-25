@@ -33,7 +33,7 @@ allprojects {
 
   plugins.withId("com.vanniktech.maven.publish.base") {
     configure<MavenPublishBaseExtension> {
-      publishToMavenCentral(SonatypeHost.S01)
+      publishToMavenCentral(SonatypeHost.DEFAULT)
       signAllPublications()
       pom {
         description.set("A simple, lightweight, multiplatform image diffing library.")
