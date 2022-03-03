@@ -1,13 +1,15 @@
+import com.vanniktech.maven.publish.JavadocJar.Dokka
+import com.vanniktech.maven.publish.KotlinMultiplatform
+import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import kotlinx.kover.api.KoverTaskExtension
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithSimulatorTests
 import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
-import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeHostTest
-import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
-import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.mavenPublish)
+  alias(libs.plugins.dokka)
 }
 
 kotlin {
@@ -78,4 +80,18 @@ tasks.withType<KotlinJvmTest>().configureEach {
   extensions.configure(KoverTaskExtension::class) {
     isDisabled = false
   }
+}
+
+tasks.withType<DokkaTask>().configureEach {
+  dokkaSourceSets.configureEach {
+    reportUndocumented.set(false)
+    skipDeprecated.set(true)
+    jdkVersion.set(8)
+  }
+}
+
+configure<MavenPublishBaseExtension> {
+  configure(
+    KotlinMultiplatform(javadocJar = Dokka("dokkaGfm"))
+  )
 }
