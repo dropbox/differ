@@ -21,7 +21,7 @@ interface ImageComparator {
 }
 
 class SimpleImageComparator(
-  val maxDistance: Float = 0.1f,
+  val maxDistance: Float = 0.001f,
   val hShift: Int = 0,
   val vShift: Int = 0,
 ) : ImageComparator {
