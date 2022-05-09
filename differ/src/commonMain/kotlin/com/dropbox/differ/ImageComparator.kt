@@ -15,9 +15,9 @@ interface ImageComparator {
    * Compares two images, returning a Double that indicates the percentage of
    * the images that differ.
    *
-   * If a mask is supplied, it will be filled with the pixels that differ.
+   * If a [diff] mask is supplied, it will be filled with the pixels that differ.
    */
-  fun compare(left: Image, right: Image, mask: Mask? = null): ComparisonResult
+  fun compare(left: Image, right: Image, diff: Mask? = null): ComparisonResult
 }
 
 class SimpleImageComparator(
@@ -25,7 +25,7 @@ class SimpleImageComparator(
   val hShift: Int = 0,
   val vShift: Int = 0,
 ) : ImageComparator {
-  override fun compare(left: Image, right: Image, mask: Mask?): ImageComparator.ComparisonResult {
+  override fun compare(left: Image, right: Image, diff: Mask?): ImageComparator.ComparisonResult {
     val width = maxOf(left.width, right.width)
     val height = maxOf(left.height, right.height)
 
@@ -70,7 +70,7 @@ class SimpleImageComparator(
           }
         }
 
-        mask?.setValue(x, y, delta)
+        diff?.setValue(x, y, delta)
       }
     }
 
