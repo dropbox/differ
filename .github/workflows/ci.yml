@@ -41,15 +41,6 @@ jobs:
       - name: Test Common JVM
         run: ./gradlew jvmTest koverMergedReport --stacktrace
 
-      - name: Add coverage report to PR
-        if: success() && github.event_name == 'pull_request'
-        uses: madrapps/jacoco-report@v1.2
-        with:
-          paths: ${{ github.workspace }}/build/reports/kover/report.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 60
-          min-coverage-changed-files: 80
-
       - name: (Fail-only) Bundle test reports
         if: failure()
         run: find . -type d -name 'reports' | zip -@ -r build-reports.zip
