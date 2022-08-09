@@ -4,6 +4,7 @@ import com.dropbox.differ.resources.TestImage
 import com.dropbox.differ.resources.mutate
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class SimpleImageComparatorTest {
   @Test fun `returns no pixel differences for identical images`() {
@@ -29,6 +30,16 @@ class SimpleImageComparatorTest {
     assertEquals(first.width * first.height, result.pixelDifferences)
   }
 
+  @Test fun `returns DIFFERENT for different sized images`() {
+    val first = TestImage(width = 1080, height = 1080)
+    val second = TestImage(width = 1080, height = 540)
+
+    val comparator = SimpleImageComparator()
+    val result = comparator.compare(first, second)
+
+    assertEquals(540 * 1080, result.pixelDifferences)
+  }
+
   @Test fun `mask contains differences`() {
     val first = TestImage(width = 1080, height = 1920)
     val second = TestImage(width = 1080, height = 1920)
@@ -50,6 +61,18 @@ class SimpleImageComparatorTest {
         val expected = if (y in (950..970) && x in (530..550)) expectedDistance else 0.0f
         assertEquals(expected, actual, "Mask pixel at $x, $y")
       }
+    }
+  }
+
+  @Test
+  fun `incorrect sized mask throws exception`() {
+    assertFailsWith<IllegalArgumentException> {
+      val first = TestImage(width = 1080, height = 1080)
+      val second = TestImage(width = 1080, height = 1080)
+      val mask = Mask(width = 400, height = 400)
+
+      val comparator = SimpleImageComparator()
+      val result = comparator.compare(first, second, mask)
     }
   }
 }
