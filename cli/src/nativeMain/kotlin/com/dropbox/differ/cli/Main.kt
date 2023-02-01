@@ -71,7 +71,7 @@ fun main(args: Array<String>) {
 
   val result = withImage(leftPath) { leftImage ->
     outputFile?.let {
-      writePPMFile(it, leftImage)
+//      writePPMFile(it, leftImage)
     }
     withImage(rightPath) { rightImage ->
       mask = Mask(leftImage.width, leftImage.height)
@@ -97,7 +97,7 @@ fun main(args: Array<String>) {
     println("Time: ${(getTimeMicros() - startTime) / 1000f}ms")
 
     val percentDiff = result.pixelDifferences.toFloat() / result.pixelCount * 100
-    println("Differences: ${result.pixelDifferences} (${percentDiff.toString(2)}%)")
+    println("Differences: ${result.pixelDifferences} (${percentDiff}%)")
     println(if (pass) "PASS" else "FAIL")
   }
 

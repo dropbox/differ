@@ -10,6 +10,7 @@ kotlin {
   linuxX64()
   mingwX64()
 
+
   sourceSets {
     val commonMain by getting {
       dependencies {}
@@ -40,6 +41,9 @@ kotlin {
     compilations["main"].cinterops {
       val stbImage by creating {
         includeDirs(defFile.parentFile.resolve("include"))
+      }
+      val libpng by creating {
+        defFile(project.file("src/nativeInterop/cinterop/libpng.def"))
       }
     }
   }

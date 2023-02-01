@@ -1,15 +1,15 @@
 [versions]
-kotlin = "1.6.10"
+kotlin = "1.8.0"
 kover = "0.5.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlinx-cli = { module = "org.jetbrains.kotlinx:kotlinx-cli", version = "0.3.4" }
 kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io", version = "0.1.16" }
-okio = { module = "com.squareup.okio:okio", version = "3.0.0" }
+okio = { module = "com.squareup.okio:okio", version = "3.3.0" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 mavenPublish = { id = "com.vanniktech.maven.publish.base", version = "0.18.0" }
-dokka = { id = "org.jetbrains.dokka", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version = "1.7.20" }
