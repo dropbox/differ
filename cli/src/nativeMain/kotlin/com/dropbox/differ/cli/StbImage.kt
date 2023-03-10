@@ -6,7 +6,7 @@ import kotlinx.cinterop.*
 import stb.image.stbi_image_free
 import stb.image.stbi_load
 
-fun <R> withImage(filePath: String, block: (image: StbImage) -> R): R {
+fun <R> withImage(filePath: String, block: (image: Image) -> R): R {
   var image: StbImage? = null
   try {
     image = StbImage(filePath)

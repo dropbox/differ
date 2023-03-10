@@ -5,6 +5,7 @@ import com.dropbox.differ.Mask
 import com.dropbox.differ.SimpleImageComparator
 import kotlin.system.exitProcess
 import kotlin.system.getTimeMicros
+import kotlin.system.getTimeMillis
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
 import kotlinx.cli.default
@@ -69,15 +70,70 @@ fun main(args: Array<String>) {
   )
   var mask: Mask
 
-  val result = withImage(leftPath) { leftImage ->
-    outputFile?.let {
-//      writePPMFile(it, leftImage)
-    }
+  inline fun vlog(msg: String) {
+    if (verbose) println(msg)
+  }
+
+  vlog("")
+  vlog("Image loader: STB")
+  vlog("Starting to load first image: $leftPath")
+  var start = getTimeMillis()
+  var result = withImage(leftPath) { leftImage ->
+    vlog("Loaded $leftPath in ${getTimeMillis() - start}ms")
+    vlog("Starting to load second image: $rightPath")
+    start = getTimeMillis()
     withImage(rightPath) { rightImage ->
+      vlog("Loaded $rightPath in ${getTimeMillis() - start}ms")
       mask = Mask(leftImage.width, leftImage.height)
-      comparator.compare(leftImage, rightImage, mask)
+
+      vlog("Starting comparison")
+      start = getTimeMillis()
+      val result = comparator.compare(leftImage, rightImage, mask)
+      vlog("Finished comparison in ${getTimeMillis() - start}ms")
+      result
     }
   }
+
+  vlog("")
+  vlog("Image loader: libpng")
+  vlog("Starting to load first image: $leftPath")
+  start = getTimeMillis()
+  result = withPNGImage2(leftPath) { leftImage ->
+    vlog("Loaded $leftPath in ${getTimeMillis() - start}ms")
+    vlog("Starting to load second image: $rightPath")
+    start = getTimeMillis()
+    withPNGImage2(rightPath) { rightImage ->
+      vlog("Loaded $rightPath in ${getTimeMillis() - start}ms")
+      mask = Mask(leftImage.width, leftImage.height)
+
+      vlog("Starting comparison")
+      start = getTimeMillis()
+      val result = comparator.compare(leftImage, rightImage, mask)
+      vlog("Finished comparison in ${getTimeMillis() - start}ms")
+      result
+    }
+  }
+
+  vlog("")
+  vlog("Image loader: libpng (copy byte to Kotlin)")
+  vlog("Starting to load first image: $leftPath")
+  start = getTimeMillis()
+  result = withPNGImage(leftPath) { leftImage ->
+    vlog("Loaded $leftPath in ${getTimeMillis() - start}ms")
+    vlog("Starting to load second image: $rightPath")
+    start = getTimeMillis()
+    withPNGImage(rightPath) { rightImage ->
+      vlog("Loaded $rightPath in ${getTimeMillis() - start}ms")
+      mask = Mask(leftImage.width, leftImage.height)
+
+      vlog("Starting comparison")
+      start = getTimeMillis()
+      val result = comparator.compare(leftImage, rightImage, mask)
+      vlog("Finished comparison in ${getTimeMillis() - start}ms")
+      result
+    }
+  }
+
 
   val diff = result.pixelDifferences.toFloat() / result.pixelCount
   val pass = diff <= threshold

@@ -2,8 +2,8 @@ headers = png.h
 headerFilter = png.h
 package = libpng
 
-compilerOpts.osx = -I/usr/local/include
+compilerOpts.osx = -I/usr/local/include -I/opt/homebrew/include/libpng16
 compilerOpts.linux = -I/usr/include/libpng -I/usr/include/libpng16
 
-linkerOpts.osx = -L/usr/local/lib -lpng
+linkerOpts.osx = -L/usr/local/lib -L/opt/homebrew/lib -lpng
 linkerOpts.linux = -L/usr/lib/x86_64-linux-gnu -lpng

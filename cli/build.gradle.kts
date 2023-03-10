@@ -5,10 +5,10 @@ plugins {
 }
 
 kotlin {
-  macosX64()
+//  macosX64()
   macosArm64()
-  linuxX64()
-  mingwX64()
+//  linuxX64()
+//  mingwX64()
 
 
   sourceSets {
@@ -24,10 +24,10 @@ kotlin {
       }
     }
 
-    get("linuxX64Main").dependsOn(nativeMain)
-    get("macosX64Main").dependsOn(nativeMain)
+//    get("linuxX64Main").dependsOn(nativeMain)
+//    get("macosX64Main").dependsOn(nativeMain)
     get("macosArm64Main").dependsOn(nativeMain)
-    get("mingwX64Main").dependsOn(nativeMain)
+//    get("mingwX64Main").dependsOn(nativeMain)
   }
 
   targets.withType<KotlinNativeTarget> {
@@ -39,11 +39,9 @@ kotlin {
     }
 
     compilations["main"].cinterops {
+      val libpng by creating {}
       val stbImage by creating {
         includeDirs(defFile.parentFile.resolve("include"))
-      }
-      val libpng by creating {
-        defFile(project.file("src/nativeInterop/cinterop/libpng.def"))
       }
     }
   }
