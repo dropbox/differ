@@ -2,9 +2,11 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
+  id("application")
 }
 
 kotlin {
+  jvm()
 //  macosX64()
   macosArm64()
 //  linuxX64()
@@ -13,15 +15,15 @@ kotlin {
 
   sourceSets {
     val commonMain by getting {
-      dependencies {}
-    }
-    val nativeMain by creating {
-      dependsOn(commonMain)
       dependencies {
         implementation(libs.kotlinx.cli)
         implementation(libs.kotlinx.io)
         implementation(project(":differ"))
       }
+    }
+    val nativeMain by creating {
+      dependsOn(commonMain)
+      dependencies {}
     }
 
 //    get("linuxX64Main").dependsOn(nativeMain)
@@ -45,4 +47,8 @@ kotlin {
       }
     }
   }
+}
+
+application {
+  mainClass.set("com.dropbox.differ.cli.jvm.JvmMainKt")
 }

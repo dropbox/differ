@@ -66,8 +66,8 @@ class SimpleImageComparator(
     }
 
     var misses = 0
-    for (x in 0 until width) {
-      for (y in 0 until height) {
+    for (y in 0 until height) {
+      for (x in 0 until width) {
         if (x >= minOf(left.width, right.width) || y >= minOf(left.height, right.height)) {
           // If we're out bounds for either of the images, then we have a 100% miss.
           // We can't call getPixel() below as it will would cause an out of bounds exception
