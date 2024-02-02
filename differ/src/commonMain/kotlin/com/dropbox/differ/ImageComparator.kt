@@ -48,7 +48,7 @@ class SimpleImageComparator(
         (b..t).forEach { offsetY ->
           if (offsetX != x || offsetY != y) {
             // If we're out of bounds for either of the images, return false
-            if (x >= minOf(left.width, right.width) || y >= minOf(left.height, right.height)) return false
+            if (offsetX >= minOf(left.width, right.width) || offsetY >= minOf(left.height, right.height)) return false
 
             val c1 = left.getPixel(offsetX, offsetY)
             val localDeltaThreshold = color.distance(c1)

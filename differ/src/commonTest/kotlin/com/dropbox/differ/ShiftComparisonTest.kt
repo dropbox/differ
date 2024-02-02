@@ -61,4 +61,14 @@ class ShiftComparisonTest {
     assertEquals(comparator.hShift, 0)
     assertEquals(comparator.vShift, 10)
   }
+
+  @Test fun `returns DIFFERENT for different sized images`() {
+    val first = TestImage(width = 1080, height = 1080)
+    val second = TestImage(width = 1080, height = 540)
+    second.setPixel(second.width - 1, second.height - 1, Color(0f, 0f, 0f, 0f))
+
+    val comparator = SimpleImageComparator(hShift = 1, vShift = 1)
+    assertEquals(540 * 1080 + 1, comparator.compare(first, second).pixelDifferences)
+    assertEquals(540 * 1080, comparator.compare(second, first).pixelDifferences)
+  }
 }
