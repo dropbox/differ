@@ -89,7 +89,7 @@ jobs:
           java-version: 11
 
       - name: Upload Snapshot
-        uses: gradle/gradle-build-action@ce999babab2de1c4b649dc15f0ee67e6246c994f
+        uses: gradle/actions/setup-gradle@v3
         with:
           arguments: |
             ${{ matrix.snapshot-target }}
@@ -103,7 +103,7 @@ jobs:
         run: echo "VERSION_NAME=$(./gradlew -q  printVersionName)" >> $GITHUB_ENV
 
       - name: Publish release (main only)
-        run: ./gradlew closeAndReleaseRepository
+        uses: gradle/actions/setup-gradle@v3
         if: success() && !endsWith(env.VERSION_NAME, '-SNAPSHOT')
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
