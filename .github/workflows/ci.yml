@@ -53,21 +53,43 @@ jobs:
           path: build-reports.zip
 
   publish:
-    runs-on: ubuntu-latest
     if: github.repository == 'dropbox/differ' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: [build]
+    strategy:
+      matrix:
+        include:
+          - snapshot-target: publishIosArm64PublicationToMavenCentralRepository
+            os: macos-latest
+          - snapshot-target: publishJvmPublicationToMavenCentralRepository
+            os: ubuntu-latest
+          - snapshot-target: publishLinuxX64PublicationToMavenCentralRepository
+            os: ubuntu-latest
+          - release-target: publishIosArm64PublicationToMavenCentral
+            os: macos-latest
+          - release-target: publishJvmPublicationToMavenCentral
+            os: ubuntu-latest
+          - release-target: publishLinuxX64PublicationToMavenCentral
+            os: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.konan
+          key: ${{ runner.os }}-${{ hashFiles('**/.lock') }}
 
       - name: Install JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: 11
 
       - name: Upload Snapshot
-        run: ./gradlew :differ:publish
+        run: ./gradlew ${{ matrix.snapshot-target }}
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}
@@ -78,7 +100,9 @@ jobs:
         run: echo "VERSION_NAME=$(./gradlew -q  printVersionName)" >> $GITHUB_ENV
 
       - name: Publish release (main only)
-        run: ./gradlew closeAndReleaseRepository
+        run: |
+          ./gradlew ${{ matrix.release-target }}
+          ./gradlew closeAndReleaseRepository
         if: success() && !endsWith(env.VERSION_NAME, '-SNAPSHOT')
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
