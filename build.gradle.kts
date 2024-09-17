@@ -3,6 +3,8 @@ import com.vanniktech.maven.publish.SonatypeHost
 import kotlinx.kover.api.CoverageEngine.JACOCO
 import kotlinx.kover.tasks.KoverMergedHtmlReportTask
 import kotlinx.kover.tasks.KoverMergedXmlReportTask
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform).apply(false)
@@ -33,7 +35,7 @@ allprojects {
 
   plugins.withId("com.vanniktech.maven.publish.base") {
     configure<MavenPublishBaseExtension> {
-      publishToMavenCentral(SonatypeHost.S01)
+      publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
       signAllPublications()
       pom {
         description.set("A simple, lightweight, multiplatform image diffing library.")
@@ -66,6 +68,10 @@ subprojects {
   tasks.withType<JavaCompile>().configureEach {
     sourceCompatibility = JavaVersion.VERSION_1_8.toString()
     targetCompatibility = JavaVersion.VERSION_1_8.toString()
+  }
+
+  tasks.withType<KotlinJvmCompile>().configureEach {
+    compilerOptions.jvmTarget = JvmTarget.JVM_1_8
   }
 
   repositories {
