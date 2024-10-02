@@ -48,16 +48,7 @@ jobs:
   publish:
     if: github.repository == 'dropbox/differ' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: [build]
-    strategy:
-      matrix:
-        include:
-          - release-target: publishIosArm64PublicationToMavenCentral
-            os: macos-latest
-          - release-target: publishJvmPublicationToMavenCentral
-            os: ubuntu-latest
-          - release-target: publishLinuxX64PublicationToMavenCentral
-            os: ubuntu-latest
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -75,7 +66,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Publish release
-        run: ./gradlew ${{ matrix.release-target }}
+        run: ./gradlew publishAllPublicationsToMavenCentralRepository # All publications should go to Maven Central
         if: success()
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
