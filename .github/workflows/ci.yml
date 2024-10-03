@@ -66,7 +66,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Publish release
-        run: ./gradlew publishAllPublicationsToMavenCentralRepository # All publications should go to Maven Central
+        run: ./gradlew publish # Publish all artifacts to all configured repositories. Maven Central for this project.
         if: success()
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
