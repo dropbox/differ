@@ -1,6 +1,10 @@
 # Change Log
 
-## Version 0.3.0
+## [Unreleased]
+
+* Nothing yet!
+
+## [0.3.0]
 
 _2024-10-04_
 
@@ -24,3 +28,6 @@ _2023-02-10_
 _2022-03-03_
 
 * Initial public release!
+
+[Unreleased]: https://github.com/dropbox/differ/compare/0.3.0...HEAD
+[0.3.0]: https://github.com/dropbox/differ/releases/tag/0.3.0
