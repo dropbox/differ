@@ -36,6 +36,23 @@ class SimpleImageComparator(
       }
     }
 
+    // Provably identical images cannot produce a difference under any tolerance or shift, so
+    // the per-pixel comparison can be skipped. Only taken when no diff mask is supplied, since
+    // the mask is expected to be filled with per-pixel deltas.
+    if (
+      diff == null &&
+      left is ExactEqualityImage &&
+      left.width == right.width && left.height == right.height &&
+      left.checkExactEquality(right) == ExactEqualityResult.Equal
+    ) {
+      return ImageComparator.ComparisonResult(
+        pixelDifferences = 0,
+        pixelCount = width * height,
+        width = width,
+        height = height,
+      )
+    }
+
     fun compareWindow(x: Int, y: Int, color: Color): Boolean {
       if (hShift == 0 && vShift == 0) return false
 
